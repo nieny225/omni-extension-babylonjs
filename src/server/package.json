@@ -1,0 +1,16 @@
+{
+  "name": "omni-extension-babylonjs-server",
+  "packageManager": "yarn@3.3.1",
+  "type": "module",
+  "externals": [
+    "omni-sdk"
+  ],
+  "scripts": {
+    "build": "node ./build.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.18.4",
+    "esbuild-sass-plugin": "^2.10.0",
+    "typescript": "^5.1.3"
+  }
+}

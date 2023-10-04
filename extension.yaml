@@ -1,0 +1,9 @@
+title: BabylonJS
+version: 0.0.1
+description: Babylonjs extension for Omni
+author: Georg
+origin: https://github.com/georgzoeller/omni-extension-babylonjs.git
+supports:
+  - "blocks:v2"
+client:
+  addToWorkbench: true
