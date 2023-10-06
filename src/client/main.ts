@@ -1,5 +1,5 @@
 //@ts-ignore
-import {OmniSDKClient} from 'omni-sdk';
+import {OmniSDKClient, OmniSDKClientEvents} from 'omni-sdk';
 const sdk = new OmniSDKClient("omni-extension-babylon").init();
 import './reset.css'
 import './style.css'
@@ -8,6 +8,7 @@ import * as BABYLON from 'babylonjs'
 import { Engine, Scene, SceneLoader, Vector3, ShadowGenerator, DirectionalLight, Color3 } from 'babylonjs';
 import * as loaders from 'babylonjs-loaders';
 import * as materials from 'babylonjs-materials';
+
 
 
 console.log(Engine)
@@ -31,7 +32,7 @@ const createScene = (sceneDescription: {
 
   /**** Materials *****/
   //color
-  const groundMat = new BABYLON.StandardMaterial("groundMat");
+  let groundMat = new BABYLON.StandardMaterial("groundMat");
   groundMat.diffuseColor = new BABYLON.Color3(0, 1, 0)
 
   //texture
@@ -39,7 +40,18 @@ const createScene = (sceneDescription: {
   roofMat.diffuseTexture = new BABYLON.Texture(sceneDescription.roofTexture ||  "https://assets.babylonjs.com/environments/roof.jpg");
   const boxMat = new BABYLON.StandardMaterial("boxMat");
   boxMat.diffuseTexture = new BABYLON.Texture(sceneDescription.wallTexture || "https://www.babylonjs-playground.com/textures/floor.png")
+  let ground = BABYLON.MeshBuilder.CreateGround("ground", {width:10, height:10});
+  ground.material = groundMat;
+  sdk.events.on(OmniSDKClientEvents.CUSTOM_EVENT,  (event) =>
+  {
 
+    console.error(JSON.stringify(event))
+    if (event ==="change_roof_texture" && event.evenArgs.fid)
+    {
+      roofMat.diffuseTexture = new BABYLON.Texture('/fid/'+event.evenArgs.fid)
+    }
+  })
+  
   /**** World Objects *****/
   const box = BABYLON.MeshBuilder.CreateBox("box", {});
   box.material = boxMat;
@@ -49,8 +61,7 @@ const createScene = (sceneDescription: {
   roof.scaling.x = 0.75;
   roof.rotation.z = Math.PI / 2;
   roof.position.y = 1.22;
-  const ground = BABYLON.MeshBuilder.CreateGround("ground", {width:10, height:10});
-  ground.material = groundMat;
+
 
   return scene;
 }
