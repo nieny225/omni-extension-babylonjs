@@ -103,7 +103,8 @@ console.error(JSON.stringify(sdk.args, null, 2))
 const scene = createScene(
   {
     roofTexture: sdk.args.roofTexture,
-    wallTexture: sdk.args.wallTexture
+    wallTexture: sdk.args.wallTexture,
+    groundTexture: sdk.args.groundTexture
   }
 ); //Call the createScene function
 
