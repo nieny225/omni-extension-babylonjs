@@ -1,6 +1,6 @@
 //@ts-ignore
 import {OmniSDKClient, OmniSDKClientEvents} from 'omni-sdk';
-const sdk = new OmniSDKClient("omni-extension-babylon").init();
+const sdk = new OmniSDKClient("omni-extension-babylonjs").init();
 import './reset.css'
 import './style.css'
 //@ts-ignore
@@ -22,6 +22,7 @@ const engine = new Engine(canvas, true); // Generate the BABYLON 3D engine
 const createScene = (sceneDescription: {
   roofTexture: string,
   wallTexture: string
+  groundTexture: string
 }) => {
   const scene = new BABYLON.Scene(engine);
 
@@ -32,26 +33,56 @@ const createScene = (sceneDescription: {
 
   /**** Materials *****/
   //color
-  let groundMat = new BABYLON.StandardMaterial("groundMat");
-  groundMat.diffuseColor = new BABYLON.Color3(0, 1, 0)
+
+
+
+
+  const textures = {
+    roof: new BABYLON.Texture(sceneDescription.roofTexture ||  "https://assets.babylonjs.com/environments/roof.jpg"),
+    wall: new BABYLON.Texture(sceneDescription.wallTexture || "https://www.babylonjs-playground.com/textures/floor.png"),
+    ground: new BABYLON.Texture(sceneDescription.groundTexture ||  "https://www.babylonjs-playground.com/textures/floor.png")
+
+  }
+
 
   //texture
   const roofMat = new BABYLON.StandardMaterial("roofMat");
   roofMat.diffuseTexture = new BABYLON.Texture(sceneDescription.roofTexture ||  "https://assets.babylonjs.com/environments/roof.jpg");
   const boxMat = new BABYLON.StandardMaterial("boxMat");
   boxMat.diffuseTexture = new BABYLON.Texture(sceneDescription.wallTexture || "https://www.babylonjs-playground.com/textures/floor.png")
-  let ground = BABYLON.MeshBuilder.CreateGround("ground", {width:10, height:10});
+  const  ground = BABYLON.MeshBuilder.CreateGround("ground", {width:10, height:10});
+  const  groundMat =  new BABYLON.StandardMaterial("groundMat");
+  groundMat.diffuseTexture =  new BABYLON.Texture(sceneDescription.groundTexture || "https://www.babylonjs-playground.com/textures/grass.png");
   ground.material = groundMat;
   sdk.events.on(OmniSDKClientEvents.CUSTOM_EVENT,  (event) =>
   {
-
     console.error(JSON.stringify(event))
-    if (event ==="change_roof_texture" && event.evenArgs.fid)
+
+    if (event.eventId.startsWith('change_texture') && event.eventArgs.fid)
     {
-      roofMat.diffuseTexture = new BABYLON.Texture('/fid/'+event.evenArgs.fid)
+      const textureId = event.eventId.split(':')[1]
+
+      switch (textureId)
+      {
+        case 'roof':
+          roofMat.diffuseTexture?.dispose()
+          roofMat.diffuseTexture = new BABYLON.Texture('/fid/'+event.eventArgs.fid)
+          break;
+        case 'wall':
+          boxMat.diffuseTexture?.dispose()
+          boxMat.diffuseTexture = new BABYLON.Texture('/fid/'+event.eventArgs.fid)
+
+          break;
+        case 'ground':
+          groundMat.diffuseTexture?.dispose()
+          groundMat.diffuseTexture = new BABYLON.Texture('/fid/'+event.eventArgs.fid)
+          break;
+      }
     }
+
+
   })
-  
+
   /**** World Objects *****/
   const box = BABYLON.MeshBuilder.CreateBox("box", {});
   box.material = boxMat;

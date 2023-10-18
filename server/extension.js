@@ -1,6 +1,6 @@
 // extension.ts
 import { OAIBaseComponent, OmniComponentMacroTypes, BlockCategory as Category } from "omni-sockets";
-debugger;
+
 var NS_OMNI = "omni-extension-babylonjs";
 var component = OAIBaseComponent.create(NS_OMNI, "sceneDefinition").fromScratch().set("description", "Create a babylonjs scene").set("title", "Create Babylon Scene").set("category", Category.TESTING).setMethod("X-CUSTOM");
 component.addInput(

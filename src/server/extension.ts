@@ -1,4 +1,4 @@
-debugger;
+
 
 import { OAIBaseComponent, type WorkerContext, OmniComponentMacroTypes , BlockCategory as Category } from 'omni-sockets'
 
