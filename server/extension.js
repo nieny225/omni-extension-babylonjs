@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2023 MERCENARIES.AI PTE. LTD.
+ * All rights reserved.
+ */
+
 // extension.ts
 import { OAIBaseComponent, OmniComponentMacroTypes, BlockCategory as Category } from "omni-sockets";
 

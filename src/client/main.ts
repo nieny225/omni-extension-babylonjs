@@ -1,3 +1,8 @@
+/**
+ * Copyright (c) 2023 MERCENARIES.AI PTE. LTD.
+ * All rights reserved.
+ */
+
 //@ts-ignore
 import {OmniSDKClient, OmniSDKClientEvents} from 'omni-sdk';
 const sdk = new OmniSDKClient("omni-extension-babylonjs").init();
